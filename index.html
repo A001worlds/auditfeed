@@ -126,7 +126,63 @@
             font-size: 13px;
         }
         
-        /* Grid */
+        .btn-text-short {
+            display: none;
+        }
+        
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            .btn-text-full {
+                display: none;
+            }
+            
+            .btn-text-short {
+                display: inline;
+            }
+            
+            .doc-title {
+                font-size: 14px;
+                max-width: 150px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+            
+            .btn-primary {
+                padding: 0 12px;
+            }
+            
+            .header {
+                padding: 0 8px;
+            }
+            
+            .menubar {
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+            
+            .menu-item {
+                font-size: 12px;
+                padding: 0 6px;
+            }
+            
+            table {
+                min-width: auto;
+            }
+            
+            th, td {
+                font-size: 11px;
+                padding: 1px 2px;
+            }
+            
+            .col-wide {
+                width: 150px;
+            }
+            
+            .formula-bar {
+                display: none;
+            }
+        }
         .grid-wrapper {
             flex: 1;
             overflow: auto;
@@ -369,7 +425,10 @@
             <div class="doc-title">Audit Feed - Unpaid Music Royalties Tracker</div>
         </div>
         <div class="header-right">
-            <button class="btn btn-primary" onclick="openSubmit()">Add Entry</button>
+            <button class="btn btn-primary" onclick="openSubmit()">
+                <span class="btn-text-full">Add Entry</span>
+                <span class="btn-text-short">Add</span>
+            </button>
             <button class="btn btn-secondary" onclick="openShare()">Share</button>
         </div>
     </div>
