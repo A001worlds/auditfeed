@@ -16,8 +16,12 @@
             font-size: 13px;
             background: #fff;
             overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
         }
-                
+        
+        /* Header */
         .header {
             height: 48px;
             border-bottom: 1px solid #e0e0e0;
@@ -31,56 +35,107 @@
         .header-left {
             display: flex;
             align-items: center;
-            gap: 8px;
         }
         
         .header-right {
             display: flex;
-            align-items: center;
             gap: 8px;
         }
         
-        .sheets-logo {
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .logo {
+            width: 36px;
+            height: 36px;
+            margin-right: 12px;
         }
         
-        .title {
+        .doc-title {
             font-size: 18px;
-            font-weight: 500;
             color: #202124;
         }
         
-        .btn-primary {
-            background: #1a73e8;
-            color: white;
-            border: none;
+        .btn {
             padding: 0 16px;
             height: 32px;
             border-radius: 16px;
+            border: none;
             font-size: 14px;
             font-weight: 500;
             cursor: pointer;
         }
         
-        .btn-primary:hover {
-            background: #1557b0;
+        .btn-primary {
+            background: #1a73e8;
+            color: white;
         }
         
-        .grid-container {
-            height: calc(100vh - 79px);
+        .btn-secondary {
+            background: #c2e7ff;
+            color: #001d35;
+        }
+        
+        /* Menu Bar */
+        .menubar {
+            height: 30px;
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .menu-item {
+            padding: 0 8px;
+            cursor: pointer;
+            height: 30px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .menu-item:hover {
+            background: rgba(0,0,0,0.05);
+        }
+        
+        /* Formula Bar */
+        .formula-bar {
+            height: 28px;
+            display: flex;
+            border-bottom: 1px solid #e0e0e0;
+            background: #fff;
+        }
+        
+        .cell-ref {
+            width: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f8f9fa;
+            border-right: 1px solid #e0e0e0;
+        }
+        
+        .formula-input {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            padding: 0 12px;
+        }
+        
+        .formula-input input {
+            flex: 1;
+            border: none;
+            outline: none;
+            font-size: 13px;
+        }
+        
+        /* Grid */
+        .grid-wrapper {
+            flex: 1;
             overflow: auto;
-            position: relative;
             background: #fff;
         }
         
         table {
             border-collapse: collapse;
             width: 100%;
-            table-layout: fixed;
             min-width: 1200px;
         }
         
@@ -89,9 +144,7 @@
             height: 21px;
             padding: 2px 4px;
             font-size: 13px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
+            text-align: left;
         }
         
         th {
@@ -101,43 +154,16 @@
             text-align: center;
             position: sticky;
             top: 0;
-            z-index: 10;
         }
         
-        .row-header {
+        .row-num {
             width: 50px;
             text-align: center;
             background: #f8f9fa;
-            position: sticky;
-            left: 0;
-            z-index: 5;
         }
         
-        .corner-cell {
-            position: sticky;
-            left: 0;
-            top: 0;
-            z-index: 11;
-            background: #f8f9fa;
-            width: 50px;
-        }
-        
-        .col-header {
-            width: 120px;
-        }
-        
-        .col-header.wide {
-            width: 450px;
-        }
-        
-        td {
-            background: white;
-            color: #000;
-        }
-        
-        .redacted {
-            font-family: monospace;
-            font-weight: bold;
+        .col-wide {
+            width: 400px;
         }
         
         .amount {
@@ -145,28 +171,48 @@
             font-weight: 500;
         }
         
+        .redacted {
+            font-family: monospace;
+            font-weight: bold;
+        }
+        
+        /* Footer */
         .footer {
             height: 31px;
             border-top: 1px solid #e0e0e0;
             display: flex;
             align-items: center;
             background: #f8f9fa;
-            padding: 0 50px;
+            padding: 0 16px;
             position: relative;
         }
         
-        .footer-stats {
+        .sheet-tab {
+            background: white;
+            border: 1px solid #dadce0;
+            border-bottom: none;
+            border-radius: 8px 8px 0 0;
+            padding: 0 16px;
+            height: 26px;
+            display: flex;
+            align-items: center;
+            color: #188038;
+            font-weight: 500;
+            margin-left: 30px;
+        }
+        
+        .stats {
             position: absolute;
             right: 20px;
-            font-size: 13px;
             color: #5f6368;
         }
         
-        .total-amount {
+        .total {
             color: #d50000;
             font-weight: 500;
         }
         
+        /* Modal */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -175,11 +221,11 @@
             right: 0;
             bottom: 0;
             background: rgba(0,0,0,0.5);
-            z-index: 100;
+            z-index: 1000;
         }
         
         .modal {
-            position: fixed;
+            position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
@@ -188,14 +234,10 @@
             padding: 24px;
             width: 500px;
             max-width: 90%;
-            max-height: 90vh;
-            overflow-y: auto;
         }
         
         .modal h2 {
             margin-bottom: 20px;
-            font-size: 20px;
-            font-weight: 400;
         }
         
         .form-field {
@@ -212,20 +254,9 @@
         .form-field select,
         .form-field textarea {
             width: 100%;
-            padding: 8px 12px;
+            padding: 8px;
             border: 1px solid #dadce0;
             border-radius: 4px;
-            font-size: 14px;
-        }
-        
-        .form-field select {
-            padding-right: 30px;
-            appearance: none;
-            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3e%3cpath fill='%235f6368' d='M6 8L2 4h8z'/%3e%3c/svg%3e");
-            background-repeat: no-repeat;
-            background-position: right 10px center;
-            background-color: white;
-            cursor: pointer;
         }
         
         .modal-buttons {
@@ -235,66 +266,29 @@
             margin-top: 24px;
         }
         
-        .btn {
-            padding: 8px 24px;
+        .msg {
+            padding: 12px;
             border-radius: 4px;
-            border: none;
-            cursor: pointer;
-            font-size: 14px;
+            margin-bottom: 16px;
+            display: none;
         }
         
-        .btn-cancel {
-            background: white;
-            border: 1px solid #dadce0;
-        }
-        
-        .btn-submit {
-            background: #1a73e8;
-            color: white;
-        }
-        
-        .btn-submit:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-        }
-        
-        .success-message {
+        .msg-success {
             background: #4caf50;
             color: white;
-            padding: 12px;
-            border-radius: 4px;
-            margin-bottom: 16px;
-            display: none;
         }
         
-        .error-message {
+        .msg-error {
             background: #f44336;
             color: white;
-            padding: 12px;
-            border-radius: 4px;
-            margin-bottom: 16px;
-            display: none;
         }
         
-        .captcha-field {
+        .captcha {
             background: #f8f9fa;
             padding: 12px;
             border-radius: 4px;
+            text-align: center;
             margin-bottom: 16px;
-            text-align: center;
-        }
-        
-        .captcha-question {
-            font-size: 16px;
-            margin-bottom: 8px;
-            font-weight: 500;
-        }
-        
-        .captcha-input {
-            width: 100px;
-            text-align: center;
-            font-size: 18px;
-            padding: 8px;
         }
         
         .loading {
@@ -302,170 +296,172 @@
             padding: 40px;
             color: #5f6368;
         }
-        
-        @media (max-width: 768px) {
-            .title {
-                font-size: 14px;
-            }
-            
-            .btn-primary {
-                padding: 0 12px;
-                height: 28px;
-                font-size: 12px;
-            }
-            
-            table {
-                min-width: auto;
-            }
-            
-            .col-header.wide {
-                width: 200px;
-            }
-            
-            th, td {
-                font-size: 11px;
-                padding: 1px 2px;
-            }
-            
-            .modal {
-                width: 95%;
-                padding: 16px;
-            }
-        }
     </style>
 </head>
 <body>
+    <!-- Header -->
     <div class="header">
         <div class="header-left">
-            <div class="sheets-logo">
-                <svg width="36" height="36" viewBox="0 0 36 36">
-                    <rect width="36" height="36" fill="#0f9d58" rx="2"/>
-                    <rect x="8" y="8" width="20" height="20" fill="white" opacity="0.9"/>
-                    <rect x="10" y="10" width="6" height="3" fill="#0f9d58"/>
-                    <rect x="18" y="10" width="6" height="3" fill="#0f9d58"/>
-                    <rect x="10" y="15" width="6" height="3" fill="#0f9d58"/>
-                    <rect x="18" y="15" width="6" height="3" fill="#0f9d58"/>
-                    <rect x="10" y="20" width="6" height="3" fill="#0f9d58"/>
-                    <rect x="18" y="20" width="6" height="3" fill="#0f9d58"/>
-                </svg>
-            </div>
-            <div class="title">Audit Feed - Unpaid Royalties Tracker</div>
+            <svg class="logo" viewBox="0 0 36 36">
+                <rect width="36" height="36" fill="#0f9d58" rx="2"/>
+                <rect x="8" y="8" width="20" height="20" fill="white" opacity="0.9"/>
+                <rect x="10" y="10" width="6" height="3" fill="#0f9d58"/>
+                <rect x="18" y="10" width="6" height="3" fill="#0f9d58"/>
+                <rect x="10" y="15" width="6" height="3" fill="#0f9d58"/>
+                <rect x="18" y="15" width="6" height="3" fill="#0f9d58"/>
+                <rect x="10" y="20" width="6" height="3" fill="#0f9d58"/>
+                <rect x="18" y="20" width="6" height="3" fill="#0f9d58"/>
+            </svg>
+            <div class="doc-title">Audit Feed - Unpaid Royalties Tracker</div>
         </div>
         <div class="header-right">
-            <button class="btn-primary" onclick="openSubmitModal()">Add Entry</button>
+            <button class="btn btn-primary" onclick="openSubmit()">Add Entry</button>
+            <button class="btn btn-secondary" onclick="openShare()">Share</button>
         </div>
     </div>
     
-    <div class="grid-container">
+    <!-- Menu Bar -->
+    <div class="menubar">
+        <div class="menu-item">File</div>
+        <div class="menu-item">Edit</div>
+        <div class="menu-item">View</div>
+        <div class="menu-item">Insert</div>
+        <div class="menu-item">Format</div>
+        <div class="menu-item">Data</div>
+        <div class="menu-item">Tools</div>
+        <div class="menu-item">Extensions</div>
+        <div class="menu-item">Help</div>
+    </div>
+    
+    <!-- Formula Bar -->
+    <div class="formula-bar">
+        <div class="cell-ref">A1</div>
+        <div class="formula-input">
+            <span style="color:#5f6368;margin-right:8px">fx</span>
+            <input type="text" placeholder="Type '@' then a name to insert a people smart chip">
+        </div>
+    </div>
+    
+    <!-- Grid -->
+    <div class="grid-wrapper">
         <div id="loading" class="loading">Loading data...</div>
-        <table id="data-table" style="display: none;">
+        <table id="grid" style="display:none">
             <thead>
                 <tr>
-                    <th class="corner-cell"></th>
-                    <th class="col-header">A</th>
-                    <th class="col-header">B</th>
-                    <th class="col-header">C</th>
-                    <th class="col-header wide">D</th>
-                    <th class="col-header">E</th>
-                    <th class="col-header">F</th>
+                    <th class="row-num"></th>
+                    <th>A</th>
+                    <th>B</th>
+                    <th>C</th>
+                    <th class="col-wide">D</th>
+                    <th>E</th>
+                    <th>F</th>
                 </tr>
             </thead>
-            <tbody id="grid-body"></tbody>
+            <tbody id="tbody"></tbody>
         </table>
     </div>
     
+    <!-- Footer -->
     <div class="footer">
-        <div class="footer-stats">
-            <span class="total-amount">$<span id="total">0</span></span> in unpaid royalties
+        <div class="sheet-tab">Sheet1</div>
+        <div class="stats">
+            <span class="total">$<span id="total">0</span></span> in unpaid royalties
         </div>
     </div>
     
     <!-- Submit Modal -->
-    <div class="modal-overlay" id="submit-overlay" onclick="closeSubmitModal()">
-        <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-overlay" id="submit-modal">
+        <div class="modal">
             <h2>Report Missing Royalties</h2>
-            <div class="success-message" id="success-msg">Successfully submitted! Your entry is pending review.</div>
-            <div class="error-message" id="error-msg">Error submitting. Please try again.</div>
+            <div class="msg msg-success" id="success">Successfully submitted! Entry pending review.</div>
+            <div class="msg msg-error" id="error">Error submitting. Please try again.</div>
             
-            <div id="submit-form">
-                <div class="form-field">
-                    <label>Amount</label>
-                    <input type="text" id="amount" required placeholder="$ 5000" />
-                </div>
-                <div class="form-field">
-                    <label>Who owes you?</label>
-                    <select id="platform" required>
-                        <option value="">Select...</option>
-                        <option value="Spotify">Spotify</option>
-                        <option value="Apple Music">Apple Music</option>
-                        <option value="Universal">Universal</option>
-                        <option value="Sony">Sony</option>
-                        <option value="Warner">Warner</option>
-                        <option value="YouTube">YouTube</option>
-                        <option value="DistroKid">DistroKid</option>
-                        <option value="TuneCore">TuneCore</option>
-                        <option value="Other">Other</option>
-                    </select>
-                </div>
-                <div class="form-field">
-                    <label>Type</label>
-                    <select id="type" required>
-                        <option value="">Select...</option>
-                        <option value="Streaming">Streaming</option>
-                        <option value="Sync">Sync</option>
-                        <option value="Performance">Performance</option>
-                        <option value="Publishing">Publishing</option>
-                        <option value="Multiple">Multiple</option>
-                    </select>
-                </div>
-                <div class="form-field">
-                    <label>Their excuse</label>
-                    <textarea id="excuse" required rows="3" placeholder="What reason did they give for not paying?"></textarea>
-                </div>
-                <div class="form-field">
-                    <label>Days waiting</label>
-                    <input type="number" id="days" required min="1" placeholder="90" />
-                </div>
-                
-                <!-- Simple Anti-Spam Verification -->
-                <div class="captcha-field">
-                    <div class="captcha-question" id="captcha-question">What is 5 + 3?</div>
-                    <input type="text" id="captcha-answer" class="captcha-input" placeholder="?" />
-                </div>
-                
-                <div class="modal-buttons">
-                    <button type="button" class="btn btn-cancel" onclick="closeSubmitModal()">Cancel</button>
-                    <button type="button" class="btn btn-submit" onclick="submitReport()">Submit</button>
-                </div>
+            <div class="form-field">
+                <label>Amount</label>
+                <input type="text" id="amount" placeholder="$ 5000">
+            </div>
+            
+            <div class="form-field">
+                <label>Who owes you?</label>
+                <select id="platform">
+                    <option value="">Select...</option>
+                    <option value="Spotify">Spotify</option>
+                    <option value="Apple Music">Apple Music</option>
+                    <option value="Universal">Universal</option>
+                    <option value="Sony">Sony</option>
+                    <option value="Warner">Warner</option>
+                    <option value="YouTube">YouTube</option>
+                    <option value="DistroKid">DistroKid</option>
+                    <option value="TuneCore">TuneCore</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            
+            <div class="form-field">
+                <label>Type</label>
+                <select id="type">
+                    <option value="">Select...</option>
+                    <option value="Streaming">Streaming</option>
+                    <option value="Sync">Sync</option>
+                    <option value="Performance">Performance</option>
+                    <option value="Publishing">Publishing</option>
+                    <option value="Multiple">Multiple</option>
+                </select>
+            </div>
+            
+            <div class="form-field">
+                <label>Their excuse</label>
+                <textarea id="excuse" rows="3" placeholder="What reason did they give?"></textarea>
+            </div>
+            
+            <div class="form-field">
+                <label>Days waiting</label>
+                <input type="number" id="days" placeholder="90">
+            </div>
+            
+            <div class="captcha">
+                <div id="captcha-q" style="font-size:16px;margin-bottom:8px">What is 5 + 3?</div>
+                <input type="text" id="captcha-a" style="width:100px;text-align:center">
+            </div>
+            
+            <div class="modal-buttons">
+                <button class="btn" onclick="closeSubmit()">Cancel</button>
+                <button class="btn btn-primary" onclick="submit()">Submit</button>
             </div>
         </div>
     </div>
     
-    <!-- Load Supabase Client -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- Share Modal -->
+    <div class="modal-overlay" id="share-modal">
+        <div class="modal">
+            <h2>Share Link</h2>
+            <div class="form-field">
+                <input value="https://auditfeed.com" readonly style="background:#f8f9fa">
+            </div>
+            <div class="modal-buttons">
+                <button class="btn btn-primary" onclick="copyLink()">Copy Link</button>
+            </div>
+        </div>
+    </div>
     
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
-        // REPLACE THESE WITH YOUR ACTUAL SUPABASE CREDENTIALS
+        // REPLACE WITH YOUR SUPABASE CREDENTIALS
         const SUPABASE_URL = 'https://cqsngogskizclelfgfla.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNxc25nb2dza2l6Y2xlbGZnZmxhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY1MjA2MjcsImV4cCI6MjA3MjA5NjYyN30.bawMy1lSqv47sOU8H5f_4wDLJIR4wuO2wGHtH6SSJDk';
         
-        // Initialize Supabase client
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
         
-        // State
         let reports = [];
         let captchaAnswer = 8;
         
-        // Captcha questions
-        const captchaQuestions = [
-            { question: "What is 5 + 3?", answer: 8 },
-            { question: "What is 10 - 4?", answer: 6 },
-            { question: "What is 3 × 3?", answer: 9 },
-            { question: "What is 12 ÷ 3?", answer: 4 },
-            { question: "What is 7 + 5?", answer: 12 }
+        const captchas = [
+            {q: "What is 5 + 3?", a: 8},
+            {q: "What is 10 - 4?", a: 6},
+            {q: "What is 3 × 3?", a: 9},
+            {q: "What is 12 ÷ 3?", a: 4}
         ];
         
-        // Platform redactions
         const redactions = {
             'Spotify': '███████',
             'Apple Music': '█████████',
@@ -478,8 +474,7 @@
             'Other': '█████'
         };
         
-        // Load approved reports from Supabase
-        async function loadReports() {
+        async function loadData() {
             try {
                 const { data, error } = await supabase
                     .from('royalties')
@@ -492,21 +487,19 @@
                 reports = data || [];
                 renderGrid();
                 document.getElementById('loading').style.display = 'none';
-                document.getElementById('data-table').style.display = 'table';
-            } catch (error) {
-                console.error('Error loading reports:', error);
-                document.getElementById('loading').textContent = 'Error loading data. Please refresh.';
+                document.getElementById('grid').style.display = 'table';
+            } catch (err) {
+                document.getElementById('loading').textContent = 'Error loading data';
             }
         }
         
-        // Render the spreadsheet
         function renderGrid() {
-            const tbody = document.getElementById('grid-body');
+            const tbody = document.getElementById('tbody');
             let html = '';
             
             // Header row
             html += '<tr>';
-            html += '<td class="row-header">1</td>';
+            html += '<td class="row-num">1</td>';
             html += '<td><strong>Date</strong></td>';
             html += '<td><strong>Amount</strong></td>';
             html += '<td><strong>Platform</strong></td>';
@@ -516,113 +509,80 @@
             html += '</tr>';
             
             // Data rows
-            reports.forEach((report, index) => {
-                const date = new Date(report.date).toLocaleDateString('en-US', { 
-                    month: '2-digit', 
-                    day: '2-digit', 
-                    year: '2-digit' 
+            reports.forEach((r, i) => {
+                const date = new Date(r.date).toLocaleDateString('en-US', {
+                    month: '2-digit',
+                    day: '2-digit',
+                    year: '2-digit'
                 });
                 
-                let excuse = report.excuse;
-                if (excuse && excuse.length > 80) {
-                    excuse = excuse.substring(0, 77) + '...';
-                }
-                
                 html += '<tr>';
-                html += `<td class="row-header">${index + 2}</td>`;
+                html += `<td class="row-num">${i + 2}</td>`;
                 html += `<td>${date}</td>`;
-                html += `<td class="amount">$${report.amount.toLocaleString()}</td>`;
-                html += `<td class="redacted">${redactions[report.platform] || '█████'}</td>`;
-                html += `<td title="${report.excuse}">${excuse}</td>`;
-                html += `<td>${report.type}</td>`;
-                html += `<td>${report.days}</td>`;
+                html += `<td class="amount">$${r.amount.toLocaleString()}</td>`;
+                html += `<td class="redacted">${redactions[r.platform] || '█████'}</td>`;
+                html += `<td>${r.excuse}</td>`;
+                html += `<td>${r.type}</td>`;
+                html += `<td>${r.days}</td>`;
                 html += '</tr>';
             });
             
-            // Empty rows to fill the grid
+            // Empty rows
             for (let i = reports.length + 2; i <= 30; i++) {
                 html += '<tr>';
-                html += `<td class="row-header">${i}</td>`;
+                html += `<td class="row-num">${i}</td>`;
                 html += '<td></td><td></td><td></td><td></td><td></td><td></td>';
                 html += '</tr>';
             }
             
             tbody.innerHTML = html;
-            updateStats();
-        }
-        
-        // Update total amount
-        function updateStats() {
+            
             const total = reports.reduce((sum, r) => sum + (r.amount || 0), 0);
             document.getElementById('total').textContent = total.toLocaleString();
         }
         
-        // Generate new captcha
-        function generateCaptcha() {
-            const captcha = captchaQuestions[Math.floor(Math.random() * captchaQuestions.length)];
-            document.getElementById('captcha-question').textContent = captcha.question;
-            captchaAnswer = captcha.answer;
+        function openSubmit() {
+            document.getElementById('submit-modal').style.display = 'block';
+            const c = captchas[Math.floor(Math.random() * captchas.length)];
+            document.getElementById('captcha-q').textContent = c.q;
+            captchaAnswer = c.a;
         }
         
-        // Open submit modal
-        function openSubmitModal() {
-            document.getElementById('submit-overlay').style.display = 'block';
-            document.getElementById('success-msg').style.display = 'none';
-            document.getElementById('error-msg').style.display = 'none';
-            generateCaptcha();
-        }
-        
-        // Close submit modal
-        function closeSubmitModal() {
-            document.getElementById('submit-overlay').style.display = 'none';
-            clearForm();
-        }
-        
-        // Clear form
-        function clearForm() {
+        function closeSubmit() {
+            document.getElementById('submit-modal').style.display = 'none';
             document.getElementById('amount').value = '';
             document.getElementById('platform').value = '';
             document.getElementById('excuse').value = '';
             document.getElementById('type').value = '';
             document.getElementById('days').value = '';
-            document.getElementById('captcha-answer').value = '';
+            document.getElementById('captcha-a').value = '';
+            document.getElementById('success').style.display = 'none';
+            document.getElementById('error').style.display = 'none';
         }
         
-        // Submit report
-        async function submitReport() {
-            // Get form values
-            const amountText = document.getElementById('amount').value.replace(/[^0-9]/g, '');
+        async function submit() {
+            const amount = document.getElementById('amount').value.replace(/[^0-9]/g, '');
             const platform = document.getElementById('platform').value;
             const excuse = document.getElementById('excuse').value;
             const type = document.getElementById('type').value;
             const days = document.getElementById('days').value;
-            const captcha = document.getElementById('captcha-answer').value;
+            const captcha = document.getElementById('captcha-a').value;
             
-            // Validate
-            if (!amountText || !platform || !excuse || !type || !days || !captcha) {
-                alert('Please fill in all fields');
+            if (!amount || !platform || !excuse || !type || !days || !captcha) {
+                alert('Please fill all fields');
                 return;
             }
             
-            // Check captcha
             if (parseInt(captcha) !== captchaAnswer) {
-                document.getElementById('error-msg').textContent = 'Incorrect answer. Please try again.';
-                document.getElementById('error-msg').style.display = 'block';
-                document.getElementById('captcha-answer').value = '';
-                generateCaptcha();
+                document.getElementById('error').style.display = 'block';
                 return;
             }
-            
-            const submitButton = document.querySelector('.btn-submit');
-            submitButton.disabled = true;
-            submitButton.textContent = 'Submitting...';
             
             try {
-                // Submit to Supabase (will be marked as approved: false by default)
-                const { data, error } = await supabase
+                const { error } = await supabase
                     .from('royalties')
                     .insert([{
-                        amount: parseInt(amountText),
+                        amount: parseInt(amount),
                         platform: platform,
                         excuse: excuse,
                         type: type,
@@ -632,42 +592,25 @@
                 
                 if (error) throw error;
                 
-                // Show success
-                document.getElementById('success-msg').style.display = 'block';
-                document.getElementById('error-msg').style.display = 'none';
-                
-                // Clear form
-                clearForm();
-                
-                // Close modal after 2 seconds
-                setTimeout(() => {
-                    closeSubmitModal();
-                }, 2000);
-                
-            } catch (error) {
-                console.error('Error submitting:', error);
-                document.getElementById('error-msg').textContent = 'Error submitting. Please try again.';
-                document.getElementById('error-msg').style.display = 'block';
-            } finally {
-                submitButton.disabled = false;
-                submitButton.textContent = 'Submit';
+                document.getElementById('success').style.display = 'block';
+                setTimeout(closeSubmit, 2000);
+            } catch (err) {
+                document.getElementById('error').style.display = 'block';
             }
         }
         
-        // Initialize on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            loadReports();
-            
-            // Refresh data every 30 seconds
-            setInterval(loadReports, 30000);
-        });
+        function openShare() {
+            document.getElementById('share-modal').style.display = 'block';
+        }
         
-        // Handle escape key
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                closeSubmitModal();
-            }
-        });
+        function copyLink() {
+            navigator.clipboard.writeText('https://auditfeed.com');
+            document.getElementById('share-modal').style.display = 'none';
+        }
+        
+        // Load data on start
+        loadData();
+        setInterval(loadData, 30000);
     </script>
 </body>
 </html>
