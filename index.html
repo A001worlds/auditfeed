@@ -238,6 +238,9 @@
         
         .modal h2 {
             margin-bottom: 20px;
+            font-size: 18px;
+            font-weight: normal;
+            color: #202124;
         }
         
         .form-field {
@@ -371,7 +374,7 @@
         <div class="cell-ref">A1</div>
         <div class="formula-input">
             <span style="color:#5f6368;margin-right:8px">fx</span>
-            <input type="text" placeholder="Type '@' then a name to insert a people smart chip">
+            <input type="text" placeholder="">
         </div>
     </div>
     
@@ -414,7 +417,7 @@
             
             <div class="form-field">
                 <label>Amount</label>
-                <input type="text" id="amount" placeholder="$ 5000">
+                <input type="text" id="amount" placeholder="$ 350">
             </div>
             
             <div class="form-field">
@@ -475,6 +478,7 @@
                 <input value="https://auditfeed.com" readonly style="background:#f8f9fa">
             </div>
             <div class="modal-buttons">
+                <button class="btn btn-cancel" onclick="closeShare()">Cancel</button>
                 <button class="btn btn-primary" onclick="copyLink()">Copy Link</button>
             </div>
         </div>
@@ -640,6 +644,10 @@
         
         function openShare() {
             document.getElementById('share-modal').style.display = 'block';
+        }
+        
+        function closeShare() {
+            document.getElementById('share-modal').style.display = 'none';
         }
         
         function copyLink() {
