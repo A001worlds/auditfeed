@@ -254,9 +254,18 @@
         .form-field select,
         .form-field textarea {
             width: 100%;
-            padding: 8px;
+            padding: 8px 12px;
             border: 1px solid #dadce0;
             border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        .form-field select {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3e%3cpath fill='%235f6368' d='M6 8L2 4h8z'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            padding-right: 30px;
         }
         
         .modal-buttons {
@@ -266,11 +275,52 @@
             margin-top: 24px;
         }
         
+        .modal-buttons .btn {
+            padding: 8px 24px;
+        }
+        
         .msg {
             padding: 12px;
             border-radius: 4px;
             margin-bottom: 16px;
             display: none;
+        }
+        
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #323232;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 4px;
+            display: none;
+            z-index: 2000;
+        }
+        
+        td.excuse-cell {
+            max-width: 400px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            position: relative;
+        }
+        
+        td.excuse-cell:hover::after {
+            content: attr(data-full);
+            position: absolute;
+            left: 0;
+            top: 100%;
+            background: #333;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 4px;
+            white-space: normal;
+            width: 300px;
+            z-index: 100;
+            font-size: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
         }
         
         .msg-success {
@@ -368,6 +418,9 @@
             <span class="total">$<span id="total">0</span></span> in unpaid royalties
         </div>
     </div>
+    
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">Link copied!</div>
     
     <!-- Submit Modal -->
     <div class="modal-overlay" id="submit-modal">
@@ -516,12 +569,15 @@
                     year: '2-digit'
                 });
                 
+                let excuseText = r.excuse || '';
+                let truncated = excuseText.length > 60 ? excuseText.substring(0, 57) + '...' : excuseText;
+                
                 html += '<tr>';
                 html += `<td class="row-num">${i + 2}</td>`;
                 html += `<td>${date}</td>`;
-                html += `<td class="amount">$${r.amount.toLocaleString()}</td>`;
+                html += `<td class="amount">${r.amount.toLocaleString()}</td>`;
                 html += `<td class="redacted">${redactions[r.platform] || '█████'}</td>`;
-                html += `<td>${r.excuse}</td>`;
+                html += `<td class="excuse-cell" data-full="${excuseText.replace(/"/g, '&quot;')}">${truncated}</td>`;
                 html += `<td>${r.type}</td>`;
                 html += `<td>${r.days}</td>`;
                 html += '</tr>';
@@ -604,8 +660,16 @@
         }
         
         function copyLink() {
-            navigator.clipboard.writeText('https://auditfeed.com');
-            document.getElementById('share-modal').style.display = 'none';
+            navigator.clipboard.writeText('https://auditfeed.com').then(() => {
+                document.getElementById('share-modal').style.display = 'none';
+                const toast = document.getElementById('toast');
+                toast.style.display = 'block';
+                setTimeout(() => {
+                    toast.style.display = 'none';
+                }, 3000);
+            }).catch(() => {
+                alert('Failed to copy link');
+            });
         }
         
         // Load data on start
