@@ -282,11 +282,31 @@
             padding: 8px 24px;
         }
         
+        .btn-cancel {
+            background: white;
+            color: #5f6368;
+            border: 1px solid #dadce0;
+        }
+        
+        .btn-cancel:hover {
+            background: #f8f9fa;
+        }
+        
         .msg {
             padding: 12px;
             border-radius: 4px;
             margin-bottom: 16px;
             display: none;
+        }
+        
+        .msg-success {
+            background: #4caf50;
+            color: white;
+        }
+        
+        .msg-error {
+            background: #f44336;
+            color: white;
         }
         
         .toast {
@@ -302,23 +322,6 @@
             z-index: 2000;
         }
         
-        td.excuse-cell {
-            max-width: 400px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-        
-        .msg-success {
-            background: #4caf50;
-            color: white;
-        }
-        
-        .msg-error {
-            background: #f44336;
-            color: white;
-        }
-        
         .captcha {
             background: #f8f9fa;
             padding: 12px;
@@ -327,10 +330,25 @@
             margin-bottom: 16px;
         }
         
+        .captcha input {
+            width: 150px;
+            padding: 8px;
+            text-align: center;
+            font-size: 16px;
+            margin-top: 8px;
+        }
+        
         .loading {
             text-align: center;
             padding: 40px;
             color: #5f6368;
+        }
+        
+        td.excuse-cell {
+            max-width: 400px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
     </style>
 </head>
@@ -374,7 +392,7 @@
         <div class="cell-ref">A1</div>
         <div class="formula-input">
             <span style="color:#5f6368;margin-right:8px">fx</span>
-            <input type="text" placeholder="">
+            <input type="text" placeholder="Type '@' then a name to insert a people smart chip">
         </div>
     </div>
     
@@ -417,7 +435,7 @@
             
             <div class="form-field">
                 <label>Amount</label>
-                <input type="text" id="amount" placeholder="$ 350">
+                <input type="text" id="amount" placeholder="$350">
             </div>
             
             <div class="form-field">
@@ -484,14 +502,7 @@
         </div>
     </div>
     
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
-        // REPLACE WITH YOUR SUPABASE CREDENTIALS
-        const SUPABASE_URL = 'https://cqsngogskizclelfgfla.supabase.co';
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNxc25nb2dza2l6Y2xlbGZnZmxhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY1MjA2MjcsImV4cCI6MjA3MjA5NjYyN30.bawMy1lSqv47sOU8H5f_4wDLJIR4wuO2wGHtH6SSJDk';
-        
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-        
         let reports = [];
         let captchaAnswer = 8;
         
@@ -516,19 +527,19 @@
         
         async function loadData() {
             try {
-                const { data, error } = await supabase
-                    .from('royalties')
-                    .select('*')
-                    .eq('approved', true)
-                    .order('date', { ascending: false });
+                const response = await fetch('/api/entries');
                 
-                if (error) throw error;
+                if (!response.ok) {
+                    throw new Error('Failed to load data');
+                }
                 
+                const data = await response.json();
                 reports = data || [];
                 renderGrid();
                 document.getElementById('loading').style.display = 'none';
                 document.getElementById('grid').style.display = 'table';
             } catch (err) {
+                console.error('Load error:', err);
                 document.getElementById('loading').textContent = 'Error loading data';
             }
         }
@@ -562,9 +573,9 @@
                 html += '<tr>';
                 html += `<td class="row-num">${i + 2}</td>`;
                 html += `<td>${date}</td>`;
-                html += `<td class="amount">${r.amount.toLocaleString()}</td>`;
+                html += `<td class="amount">$${r.amount.toLocaleString()}</td>`;
                 html += `<td class="redacted">${redactions[r.platform] || '█████'}</td>`;
-                html += `<td class="excuse-cell" data-full="${excuseText.replace(/"/g, '&quot;')}">${truncated}</td>`;
+                html += `<td class="excuse-cell" title="${excuseText.replace(/"/g, '&quot;')}">${truncated}</td>`;
                 html += `<td>${r.type}</td>`;
                 html += `<td>${r.days}</td>`;
                 html += '</tr>';
@@ -617,28 +628,51 @@
             }
             
             if (parseInt(captcha) !== captchaAnswer) {
+                document.getElementById('error').textContent = 'Incorrect answer. Try again.';
                 document.getElementById('error').style.display = 'block';
                 return;
             }
             
+            const submitBtn = document.querySelector('#submit-modal .btn-primary');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Submitting...';
+            
             try {
-                const { error } = await supabase
-                    .from('royalties')
-                    .insert([{
-                        amount: parseInt(amount),
+                const response = await fetch('/api/submit', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        amount: amount,
                         platform: platform,
                         excuse: excuse,
                         type: type,
-                        days: parseInt(days),
-                        approved: false
-                    }]);
+                        days: days,
+                        captchaAnswer: parseInt(captcha),
+                        captchaExpected: captchaAnswer
+                    })
+                });
                 
-                if (error) throw error;
+                if (response.status === 429) {
+                    throw new Error('Too many submissions. Please try again later.');
+                }
+                
+                if (!response.ok) {
+                    const text = await response.text();
+                    throw new Error(text || 'Submission failed');
+                }
                 
                 document.getElementById('success').style.display = 'block';
+                document.getElementById('error').style.display = 'none';
                 setTimeout(closeSubmit, 2000);
+                
             } catch (err) {
+                document.getElementById('error').textContent = err.message || 'Error submitting';
                 document.getElementById('error').style.display = 'block';
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Submit';
             }
         }
         
