@@ -304,23 +304,6 @@
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
-            position: relative;
-        }
-        
-        td.excuse-cell:hover::after {
-            content: attr(data-full);
-            position: absolute;
-            left: 0;
-            top: 100%;
-            background: #333;
-            color: white;
-            padding: 8px 12px;
-            border-radius: 4px;
-            white-space: normal;
-            width: 300px;
-            z-index: 100;
-            font-size: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
         }
         
         .msg-success {
@@ -474,11 +457,11 @@
             
             <div class="captcha">
                 <div id="captcha-q" style="font-size:16px;margin-bottom:8px">What is 5 + 3?</div>
-                <input type="text" id="captcha-a" style="width:100px;text-align:center">
+                <input type="text" id="captcha-a" style="width:150px;text-align:center;padding:8px;font-size:16px">
             </div>
             
             <div class="modal-buttons">
-                <button class="btn" onclick="closeSubmit()">Cancel</button>
+                <button class="btn btn-cancel" onclick="closeSubmit()">Cancel</button>
                 <button class="btn btn-primary" onclick="submit()">Submit</button>
             </div>
         </div>
